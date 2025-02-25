@@ -5,7 +5,7 @@ It connects to a **Spring Boot WebSocket backend** to display **real-time stock 
 
 ## 🚀 Features
 ✅ Live stock price updates via **WebSockets**  
-✅ Dark mode toggle 🌙☀️  
+✅ Light and Dark mode toggle 🌙☀️  
 ✅ Responsive UI with **Tailwind CSS**  
 ✅ Clean and minimal interface  
 
