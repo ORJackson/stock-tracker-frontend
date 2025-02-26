@@ -8,20 +8,25 @@ export default function Home() {
     const [messages, setMessages] = useState([]);
     const [symbol, setSymbol] = useState("AAPL");
     const [socket, setSocket] = useState(null);
-    const [darkMode, setDarkMode] = useState(true);
+    const [darkMode, setDarkMode] = useState(true); // Default to dark mode
 
     useEffect(() => {
-        // Load theme preference from localStorage
+        // Check saved theme in localStorage
         const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "dark") {
+
+        if (savedTheme) {
+            document.documentElement.classList.toggle("dark", savedTheme === "dark");
+            setDarkMode(savedTheme === "dark");
+        } else {
+            // Default to dark mode if no preference is saved
             document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
             setDarkMode(true);
         }
 
         const ws = new WebSocket(WEBSOCKET_URL);
         ws.onopen = () => {
             console.log("Connected to WebSocket");
-            ws.send(symbol);
         };
         ws.onmessage = (event) => {
             setMessages((prev) => [...prev, event.data]);
@@ -30,8 +35,9 @@ export default function Home() {
         ws.onclose = () => console.log("WebSocket disconnected");
 
         setSocket(ws);
+
         return () => ws.close();
-    }, [symbol]);
+    }, []);
 
     const toggleDarkMode = () => {
         if (darkMode) {
@@ -51,7 +57,7 @@ export default function Home() {
                     onClick={toggleDarkMode}
                     className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800 dark:text-white"
                 >
-                    {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                    {darkMode ? "🌙" : "☀️"}
                 </button>
                 <h1 className="text-2xl font-bold">📈 Stock Tracker</h1>
                 <input
