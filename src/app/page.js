@@ -50,6 +50,18 @@ export default function Home() {
         setDarkMode(!darkMode);
     };
 
+    const handleSearch = () => {
+        if (socket && symbol.trim() !== "") {
+            socket.send(symbol);
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            handleSearch(); 
+        }
+    };
+
     return (
         <main className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-6">
             <div className="w-full max-w-xl text-center">
@@ -64,11 +76,12 @@ export default function Home() {
                     type="text"
                     value={symbol}
                     onChange={(e) => setSymbol(e.target.value.toUpperCase())}
-                    placeholder="Enter Stock Symbol (e.g., TSLA)"
+                    onKeyDown={handleKeyDown}
+                    placeholder="Enter Stock Symbol"
                     className="mt-4 p-2 border border-gray-400 dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
                 />
                 <button
-                    onClick={() => socket?.send(symbol)}
+                    onClick={handleSearch}
                     className="mt-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 >
                     🔍 Get Price
